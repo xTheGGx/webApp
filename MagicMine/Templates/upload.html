@@ -1,56 +1,81 @@
-<style>
-    body {
-      background-color: #f2f2f2;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    
-    label {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 10px;
-    }
-    
-    input[type="file"] {
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    
-    button {
-      background-color: #333;
-      color: #fff;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    button:hover {
-      background-color: #555;
-    }
-</style>
-
-<div class="container">
-  <form action="/upload" method="POST" enctype="multipart/form-data">
-    <label for="file">Selecciona un archivo:</label>
-    <input type="file" id="file" name="file">
-    <button type="submit">Subir</button>
-  </form>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subir Archivo CSV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .upload-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .upload-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .upload-form input[type="file"] {
+            display: block;
+            margin-bottom: 20px;
+        }
+        .upload-form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .success-message {
+            color: #4CAF50;
+        }
+        .error-message {
+            color: #FF0000;
+        }
+        .return-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .return-button a {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+        .return-button a:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Subir Archivo CSV</h1>
+    <div class="upload-form">
+        {% if success_message %}
+            <div class="message success-message">
+                {{ success_message }}
+            </div>
+        {% endif %}
+        {% if error_message %}
+            <div class="message error-message">
+                {{ error_message }}
+            </div>
+        {% endif %}
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file">Seleccionar archivo:</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+            <input type="submit" value="Subir">
+        </form>
+    </div>
+    <div class="return-button">
+        <a href="menu">Regresar</a>
+    </div>
+</body>
+</html>

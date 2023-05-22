@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultado</h1>
+    <div>
+        {{ dataframe|safe }}
+    </div>
+    <h1>Gráfico de Barras</h1>
+    <img src="{{ url_for('static', filename='chart.png') }}" alt="Gráfico de Barras">
+    </div>
+        {{ dataframe2|safe }}
+    </div>
+    <div class="button-container">
+        <a href="/menu">Regresar</a>
+    </div>
+    
+</body>
+</html>
