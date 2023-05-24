@@ -47,7 +47,11 @@ def aprioriProcess():
     input_folder = 'input'
     selected_file = request.form['file']
     df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
-
+    
+    # Obtener los valores ingresados por el usuario
+    support = float(request.form['support'])
+    confidence = float(request.form['confidence'])
+    lift = float(request.form['lift'])
     # Realiza el procesamiento deseado con el DataFrame df
     #Se incluyen todas las transacciones en una sola lista
     Transacciones = df.values.reshape(-1).tolist() #-1 significa 'dimensión desconocida'
@@ -63,7 +67,7 @@ def aprioriProcess():
     Lista_html = Lista.to_html()
 
     # Se genera un gráfico de barras
-    plt.figure(figsize=(8,10), dpi=300)
+    plt.figure(figsize=(8,20), dpi=300)
     plt.ylabel('Item')
     plt.xlabel('Frecuencia')
     plt.barh(Lista['Item'], width=Lista['Frecuencia'], color='blue')
@@ -72,13 +76,24 @@ def aprioriProcess():
     #level=0 especifica desde el primer índice
     TransaccionesLista = df.stack().groupby(level=0).apply(list).tolist()
 
-    ReglasC1 = apriori(TransaccionesLista, 
-                        min_support=0.1,
-                        min_confidence=0.2, 
-                        min_lift=3)
-    ReglasC1 = (pd.DataFrame(ReglasC1)).to_html()
+    ReglasC1 = apriori(TransaccionesLista,
+                       min_support=support,
+                       min_confidence=confidence,
+                       min_lift=lift)
     
-    return render_template('aprioriProcess.html', dataframe=Lista_html, dataframe2=ReglasC1)
+    Resultados = list(ReglasC1)
+    
+    formatted_results = []
+    for item in Resultados:
+        Emparejar = item[0]
+        items = [x for x in Emparejar]
+        regla = ', '.join(items)
+        soporte = item[1]
+        confianza = item[2][0][2]
+        elevacion = item[2][0][3]
+        formatted_results.append((regla, soporte, confianza, elevacion))
+
+    return render_template('aprioriProcess.html', dataframe=Lista_html, enumerated_rules=formatted_results )
 
 @app.route('/metricas')
 def metricas():
