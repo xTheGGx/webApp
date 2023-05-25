@@ -41,35 +41,15 @@
 <body>
     <h1>Resultado</h1>
     <div>
-        {{ dataframe|safe }}
-    </div>
-    <h1>Gráfico de frecuencias</h1>
-    <img src="{{ url_for('static', filename='chart.png') }}" alt="Gráfico de Barras" class="small-image">
-    <div>
-        <h1>Tabla de Reglas de Asociación</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Regla de Asociación</th>
-                    <th>Soporte</th>
-                    <th>Confianza</th>
-                    <th>Elevación</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for rule in enumerated_rules %}
-                    <tr>
-                        <td>{{ rule[0] }}</td>
-                        <td>{{ rule[1] }}</td>
-                        <td>{{ rule[2] }}</td>
-                        <td>{{ rule[3] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h1>Matriz estandarizada</h1>>
+        {{ euclidianSample|safe }}
     </div>    
+    <div>
+        <h1>Matriz euclidiana</h1>
+        {{ MEuclidiana | safe}}
+    </div>
     <div class="button-container">
-        <a href="/apriori">Regresar</a>
+        <a href="/metricas">Regresar</a>
     </div>
     
 </body>

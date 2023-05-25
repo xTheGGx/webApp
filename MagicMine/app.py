@@ -4,12 +4,12 @@ import io
 import pandas as pd                 # Para la manipulación y análisis de los datos
 import numpy as np                  # Para crear vectores y matrices n dimensionales
 import matplotlib.pyplot as plt     # Para la generación de gráficas a partir de los datos
-
+from sklearn.preprocessing import StandardScaler, MinMaxScaler  
 from apyori import apriori
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory,send_file
 from werkzeug.utils import secure_filename
 from datetime import datetime
-
+from scipy.spatial.distance import cdist
 
 app = Flask(__name__)
 
@@ -97,7 +97,77 @@ def aprioriProcess():
 
 @app.route('/metricas')
 def metricas():
-    return render_template('metricas.html')
+    input_folder = 'input'
+    files = os.listdir(input_folder)
+    csv_files = [file for file in files if file.endswith('.csv')]
+    return render_template('metricas.html', csv_files=csv_files)
+
+@app.route('/metricas/process', methods=['POST'])
+def metricasProcess():
+    selected_file = request.form['file']
+    option = request.form['option']
+
+    if option == "Euclidiana":
+        return redirect(url_for('metricasEuclidiana', selected_file=selected_file))
+    elif option == "Chebyshev":
+        return redirect(url_for('metricasChebyshev', selected_file=selected_file))
+    elif option == "Manhattan":
+        return redirect(url_for('metricasManhattan', selected_file=selected_file))
+    elif option == "Minkowski":
+        return redirect(url_for('metricasMinkowski', selected_file=selected_file))
+
+
+#Euclidiana, Chebyshev, Manhattan, Minkowski
+
+@app.route("/metricas/euclidian")
+def metricasEuclidiana():
+    input_folder = 'input'
+    selected_file = request.args.get('selected_file')
+    df = pd.read_csv(os.path.join(input_folder, selected_file))
+    print(df)
+    if selected_file is None:
+        # Manejar la situación si la clave "file" no está presente en la solicitud POST
+        return "Error: No se proporcionó el archivo seleccionado"
+    
+
+    #Logica del algoritmo
+    #Estandarizando matriz
+    estandarizar = StandardScaler()                               # Se instancia el objeto StandardScaler o MinMaxScaler 
+
+    # Estandarizar matriz
+    MEstandarizada = estandarizar.fit_transform(df)    
+    euclidianSample = pd.DataFrame(MEstandarizada)
+    print(MEstandarizada)
+    print(euclidianSample)
+    euclidianSample_html = euclidianSample.to_html()
+    DstEuclidiana = cdist(MEstandarizada, MEstandarizada, metric='euclidean')
+    MEuclidiana = pd.DataFrame(DstEuclidiana)
+    MEuclidiana_html = MEuclidiana.to_html()
+    return render_template("metricasEuclidiana.html",euclidianSample=euclidianSample_html,MEuclidiana=MEuclidiana_html)
+
+@app.route("/metricas/chebyshev")
+def metricasChebyshev():
+    input_folder = 'input'
+    selected_file = request.form['file']
+    df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
+    #Logica 
+    return render_template("metricasChebyshev.html")
+
+@app.route("/metricas/manhattan")
+def metricasManhattan():
+    input_folder = 'input'
+    selected_file = request.form['file']
+    df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
+    #Logica 
+    return render_template("metricasManhattan.html")
+
+@app.route("/metricas/minkowsky")
+def metricasMinkowsky():
+    input_folder = 'input'
+    selected_file = request.form['file']
+    df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
+    #Logica 
+    return render_template("metricasMinkowsky.html")
 
 @app.route('/clustering')
 def clustering():
