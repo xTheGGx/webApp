@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apriori</title>
+</head>
+<body>
+    <h1>Seleccionar archivo CSV</h1>
+    <form action="/apriori/process" method="POST">
+        <select name="file">
+            {% for csv_file in csv_files %}
+            <option value="{{ csv_file }}">{{ csv_file }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="support">Soporte:</label>
+        <input type="number" step="0.0001" name="support" id="support" required>
+        <br>
+        <label for="confidence">Confianza:</label>
+        <input type="number" step="0.01" name="confidence" id="confidence" required>
+        <br>
+        <label for="lift">Elevación:</label>
+        <input type="number" step="0.01" name="lift" id="lift" required>
+        <br>
+        <input type="submit" value="Procesar">
+    </form>
+    <form action="/menu" method="GET">
+        <input type="submit" value="Regresar">
+    </form>
+</body>
+</html>
