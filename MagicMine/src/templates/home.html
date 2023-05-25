@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>MagicMine - Página de Inicio</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
   <style>
     body {
       background-color: #f2f2f2;
@@ -51,11 +53,12 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <img class="logo" src="/src/logo.jpg" alt="MagicMine Logo">
+  <main class="container mdc-top-app-bar--fixed-adjust">
+    <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="MagicMine Logo">
     <h1>MagicMine</h1>
     <p>Bienvenido a MagicMine, el lugar donde la magia se hace con algoritmos.</p>
     <a href="menu">Comenzar</a>
-  </div>
+  </main>
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 </body>
 </html>
