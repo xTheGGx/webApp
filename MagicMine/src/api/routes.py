@@ -8,7 +8,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 from scipy.spatial.distance import cdist
 from src.api import app
-from src.ia.aprioriC import Apriori
+from src.ia.aprioriModule import Apriori
+from src.ia.metricasModule import Metricas
 
 @app.route('/')
 @app.route('/home')
@@ -62,48 +63,55 @@ def metricas():
     csv_files = [file for file in files if file.endswith('.csv')]
     return render_template('metricas.html', csv_files=csv_files)
 
+
+
 @app.route('/metricas/process', methods=['POST'])
 def metricasProcess():
     selected_file = request.form['file']
     option = request.form['option']
-
+    lim_inf = int(request.form['limInf'])
+    lim_sup = int(request.form['limSup'])
+    dist_a = int(request.form['distA'])
+    dist_b = int(request.form['distB'])
+    
     if option == "Euclidiana":
-        return redirect(url_for('metricasEuclidiana', selected_file=selected_file))
+        return redirect(url_for('metricasEuclidiana', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
     elif option == "Chebyshev":
-        return redirect(url_for('metricasChebyshev', selected_file=selected_file))
+        return redirect(url_for('metricasChebyshev', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
     elif option == "Manhattan":
-        return redirect(url_for('metricasManhattan', selected_file=selected_file))
+        return redirect(url_for('metricasManhattan', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
     elif option == "Minkowski":
-        return redirect(url_for('metricasMinkowski', selected_file=selected_file))
+        return redirect(url_for('metricasMinkowski', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
+
 
 
 #Euclidiana, Chebyshev, Manhattan, Minkowski
 
-@app.route("/metricas/euclidian")
+@app.route("/metricas/euclidian", methods=['GET', 'POST'])
 def metricasEuclidiana():
-    input_folder = 'input'
-    selected_file = request.args.get('selected_file')
-    df = pd.read_csv(os.path.join(input_folder, selected_file))
-    print(df)
-    if selected_file is None:
-        # Manejar la situación si la clave "file" no está presente en la solicitud POST
-        return "Error: No se proporcionó el archivo seleccionado"
     
+    selected_file = request.args.get('selected_file')
+    distA = int(request.args.get('dist_a'))
+    distB = int(request.args.get('dist_b'))
+    limInferior = int(request.args.get('lim_inf'))
+    limSuperior = int(request.args.get('lim_sup'))
+    metricas = Metricas(selected_file)
+    print(distA,distB,limInferior,limSuperior,selected_file)
+    MEstandarizada = metricas.createME()
+    MEuclidiana = metricas.createMEuclidian(MEstandarizada)
+    MParcial = metricas.partialEuclidianDistance(MEuclidiana, limInferior,limSuperior)
+    Dst = metricas.distEuclidian(MEuclidiana, distA, distB)
 
-    #Logica del algoritmo
-    #Estandarizando matriz
-    estandarizar = StandardScaler()                               # Se instancia el objeto StandardScaler o MinMaxScaler 
 
-    # Estandarizar matriz
-    MEstandarizada = estandarizar.fit_transform(df)    
-    euclidianSample = pd.DataFrame(MEstandarizada)
-    print(MEstandarizada)
-    print(euclidianSample)
-    euclidianSample_html = euclidianSample.to_html()
-    DstEuclidiana = cdist(MEstandarizada, MEstandarizada, metric='euclidean')
-    MEuclidiana = pd.DataFrame(DstEuclidiana)
-    MEuclidiana_html = MEuclidiana.to_html()
-    return render_template("metricasEuclidiana.html",euclidianSample=euclidianSample_html,MEuclidiana=MEuclidiana_html)
+    return render_template("metricasEuclidiana.html"
+                           ,euclidianSample=MEstandarizada.to_html()
+                           ,MEuclidiana=MEuclidiana.to_html()
+                           , MParcial = MParcial.to_html()
+                           , Dst = Dst, A = distA, B =distB)
+
+
+#Euclidiana, Chebyshev, Manhattan, Minkowski
+
 
 @app.route("/metricas/chebyshev")
 def metricasChebyshev():

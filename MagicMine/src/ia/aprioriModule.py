@@ -5,6 +5,7 @@ import pandas as pd            # Para crear vectores y matrices n dimensionales
 import matplotlib.pyplot as plt     # Para la generación de gráficas a partir de los datos
 from apyori import apriori
 
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 class Apriori:

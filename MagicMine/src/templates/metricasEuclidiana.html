@@ -39,7 +39,8 @@
     </style>
 </head>
 <body>
-    <h1>Resultado</h1>
+    
+    <h1>Resultados</h1>
     <div>
         <h1>Matriz estandarizada</h1>>
         {{ euclidianSample|safe }}
@@ -48,6 +49,17 @@
         <h1>Matriz euclidiana</h1>
         {{ MEuclidiana | safe}}
     </div>
+
+    <div>
+        <h1>Matriz parcial estandarizada</h1>>
+        {{ MParcial|safe }}
+    </div>    
+    <div>
+        <h1>La distancia euclidiana entre los elementos [{{A}}] y [{{B}}] solicitados es: {{ Dst }}</h1>
+
+    </div>
+    
+        
     <div class="button-container">
         <a href="/metricas">Regresar</a>
     </div>
