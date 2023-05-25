@@ -5,6 +5,103 @@
     <title>Tabla de frecuencias</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const file = "{{file}}"
+            const support = "{{support}}"
+            const confidence = "{{confidence}}"
+            const lift = "{{lift}}";
+
+            const requestBody = {
+                file: file,
+                support: support,
+                confidence: confidence,
+                lift: lift
+            };
+
+            fetch('/apriori/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                var parsedData = JSON.parse(data);
+                var table = document.getElementById('data-table');
+                var tbody = document.createElement('tbody');
+                var pageSize = 3; // Number of rows to display per page
+                var currentPage = 1; // Current page
+
+                // Function to render the table rows for the current page
+                function renderTableRows() {
+                tbody.innerHTML = ''; // Clear existing rows
+
+                var startIndex = (currentPage - 1) * pageSize;
+                var endIndex = startIndex + pageSize;
+                var currentPageData = parsedData.slice(startIndex, endIndex);
+
+                // Iterate over the data and create table rows
+                currentPageData.forEach(function(row) {
+                    var tr = document.createElement('tr');
+
+                    Object.values(row).forEach(function(value) {
+                    var td = document.createElement('td');
+                    td.classList.add('mdc-data-table__cell');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                    });
+
+                    tbody.appendChild(tr);
+                });
+
+                // Add the populated tbody to the table
+                table.appendChild(tbody);
+                }
+
+                // Function to update the pagination UI
+                function updatePaginationUI() {
+                var totalRows = parsedData.length;
+                var totalPages = Math.ceil(totalRows / pageSize);
+                var paginationInfo = document.getElementById('pagination-info');
+
+                paginationInfo.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+                document.getElementById('prev-page-btn').disabled = (currentPage === 1);
+                document.getElementById('next-page-btn').disabled = (currentPage === totalPages);
+                }
+
+                // Function to handle previous page button click
+                function prevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTableRows();
+                    updatePaginationUI();
+                }
+                }
+
+                // Function to handle next page button click
+                function nextPage() {
+                var totalPages = Math.ceil(parsedData.length / pageSize);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTableRows();
+                    updatePaginationUI();
+                }
+                }
+
+                // Render initial table rows and pagination UI
+                renderTableRows();
+                updatePaginationUI();
+
+                // Attach event listeners to pagination buttons
+                document.getElementById('prev-page-btn').addEventListener('click', prevPage);
+                document.getElementById('next-page-btn').addEventListener('click', nextPage);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
     <style>
         table {
             border-collapse: collapse;
@@ -43,37 +140,45 @@
 </head>
 <body>
     <h1>Resultado</h1>
+    <div class="button-container">
+        <a href="/apriori">Regresar</a>
+    </div> 
+    <div>
+        <h1>Tabla de Reglas de Asociación</h1>
+        
+        <div class="mdc-data-table">
+            <div class="mdc-data-table__table-container">
+                <table id="data-table" class="mdc-data-table__table">
+                    <thead>
+                        <tr class="mdc-data-table__header-row">
+                            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Regla de Asociación</th>
+                            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Soporte</th>
+                            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Confianza</th>
+                            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Elevación</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="mdc-data-table__pagination">
+                <div class="mdc-data-table__pagination-navigation">
+                    <button id="prev-page-btn" class="mdc-icon-button material-icons mdc-data-table__pagination-button">
+                        <div class="mdc-button__icon">chevron_left</div>
+                    </button>
+                    <div id="pagination-info" class="mdc-data-table__pagination-info"></div>
+                    <button id="next-page-btn" class="mdc-icon-button material-icons mdc-data-table__pagination-button">
+                        <div class="mdc-button__icon">chevron_right</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <img src="{{ url_for('static', filename='chart.png') }}" alt="Gráfico de Barras" class="small-image">
     <div>
         {{ dataframe|safe }}
     </div>
     <h1>Gráfico de frecuencias</h1>
-    <img src="{{ url_for('static', filename='chart.png') }}" alt="Gráfico de Barras" class="small-image">
-    <div>
-        <h1>Tabla de Reglas de Asociación</h1>
-        <table class="mdc-data-table">
-            <thead>
-                <tr class="mdc-data-table__header-row">
-                    <th class="mdc-data-table__header-row">Regla de Asociación</th>
-                    <th class="mdc-data-table__header-row">Soporte</th>
-                    <th class="mdc-data-table__header-row">Confianza</th>
-                    <th class="mdc-data-table__header-row">Elevación</th>
-                </tr>
-            </thead>
-            <tbody class="mdc-data-table__content">
-                {% for rule in enumerated_rules %}
-                    <tr class="mdc-data-table__row">
-                        <td class="mdc-data-table__cell">{{ rule[0] }}</td>
-                        <td class="mdc-data-table__cell">{{ rule[1] }}</td>
-                        <td class="mdc-data-table__cell">{{ rule[2] }}</td>
-                        <td class="mdc-data-table__cell">{{ rule[3] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>    
     <div class="button-container">
         <a href="/apriori">Regresar</a>
     </div>
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 </body>
 </html>

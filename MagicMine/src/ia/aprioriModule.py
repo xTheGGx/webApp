@@ -26,7 +26,7 @@ class Apriori:
         Lista = Lista.rename(columns={0 : 'Item'})
         self.createFrecuencyPlot(Lista)
         #Se muestra la lista
-        return Lista.to_html()
+        return Lista
     
     def createFrecuencyPlot(self, Lista):
          # Se genera un gráfico de barras
@@ -49,14 +49,15 @@ class Apriori:
                         min_confidence=confidence,
                         min_lift=lift)
         
-        Resultados = list(ReglasC1)
-        formatted_results = []
-        for item in Resultados:
-            Emparejar = item[0]
-            items = [x for x in Emparejar]
-            regla = ', '.join(items)
-            soporte = item[1]
-            confianza = item[2][0][2]
-            elevacion = item[2][0][3]
-            formatted_results.append((regla, soporte, confianza, elevacion))
-        return formatted_results
+        results = list(ReglasC1)
+        data = []
+        for relation_record in results:
+            items = ', '.join(str(item) for item in relation_record.items)
+            support = relation_record.support
+            confidence = next(iter(relation_record.ordered_statistics)).confidence
+            lift = next(iter(relation_record.ordered_statistics)).lift
+
+            data.append({'Rule': items, 'Support': support, 'Confidence': confidence, 'Lift': lift})
+
+        df = pd.DataFrame(data)
+        return df
