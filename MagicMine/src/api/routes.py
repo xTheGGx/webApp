@@ -63,6 +63,8 @@ def metricas():
     csv_files = [file for file in files if file.endswith('.csv')]
     return render_template('metricas.html', csv_files=csv_files)
 
+
+
 @app.route('/metricas/process', methods=['POST'])
 def metricasProcess():
     selected_file = request.form['file']
