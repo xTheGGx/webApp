@@ -31,7 +31,7 @@ class Apriori:
     def createFrecuencyPlot(self, Lista):
          # Se genera un gráfico de barras
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        chart_path = os.path.join(current_dir, '../../static/chart.png')
+        chart_path = os.path.join(current_dir, '../../static/charts/aprioriFrecuency.png')
         plt.figure(figsize=(8,20), dpi=300)
         plt.ylabel('Item')
         plt.xlabel('Frecuencia')
