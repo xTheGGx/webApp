@@ -3,14 +3,40 @@ import pandas as pd                # Para crear vectores y matrices n dimensiona
 import matplotlib.pyplot as plt     # Para la generación de gráficas a partir de los datos
 from sklearn.preprocessing import StandardScaler  
 from apyori import apriori
-from flask import request, render_template, redirect, url_for
+import json
+from flask import request, render_template, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from scipy.spatial.distance import cdist
 from src.api import app
 from src.ia.aprioriModule import Apriori
 from src.ia.metricasModule import Metricas
+# --------------------
+# ENDPOINTS DEL BACKEND: Puede hacer procesos más pesados como la ejecución de algoritmos y puede pedirse una vez que se cargado el template ya que lo hace asíncronamente, de esta manera se crea una aplicación reactiva
+# --------------------
+@app.route('/apriori/data', methods=['POST'])
+def aprioriData():
+    file = request.json['file']
+    support = float(request.json['support'])
+    confidence = float(request.json['confidence'])
+    lift = float(request.json['lift'])
+    page = int(request.args.get('page', 1))  # Get the page number from the request
+    per_page = int(request.args.get('per_page', 10))  # Get the number of items per page
 
+    aprioriModule = Apriori(fileName=file)
+    data = aprioriModule.apriori(support=support, confidence=confidence, lift=lift)
+    # Calculate the start and end indices for the current page
+    page_size = per_page
+    start_index = (page - 1) * page_size
+    end_index = start_index + page_size
+    # Get the data for the current page
+    paginated_data = data.iloc[start_index:end_index].to_dict(orient='records')
+    json_data = json.dumps(paginated_data)
+    
+    return jsonify(json_data)
+# --------------------
+# RUTAS DEL WEBSITE: Solo debe mostrar el template sin procesamiento extra como la ejecución de algoritmos, ya que ocaciona un cuello de botella antes de pintar el template
+# --------------------
 @app.route('/')
 @app.route('/home')
 def home():
@@ -42,19 +68,18 @@ def aprioriAlg():
 
 @app.route('/apriori/process', methods=['POST'])
 def aprioriProcess():
-    selected_file = request.form['file']
+    file = request.form['file']
     
     # Obtener los valores ingresados por el usuario
     support = float(request.form['support'])
     confidence = float(request.form['confidence'])
     lift = float(request.form['lift'])
 
-    aprioriModule = Apriori(fileName=selected_file)
-
-    Lista_html = aprioriModule.createFrecuencyTable()
-    Resultados = aprioriModule.apriori(support=support, confidence=confidence, lift=lift)
-
-    return render_template('aprioriProcess.html', dataframe=Lista_html, enumerated_rules=Resultados )
+    aprioriModule = Apriori(fileName=file)
+    # Debería ser ejecutado desde un endpoint, Evita ejecutarlo en las rutas de la aplicación ya que ocasiona un cuello de botella antes de ser pintado el template, ya que tiene que esperar a Lista_html además de la imagen del plot
+    Lista_html = aprioriModule.createFrecuencyTable().to_html()
+    # Procura solo enviar parámetros que no necesitan un preproceso, un ejemplo son las configuraciones del algoritmo como soporte, confianza o elevación
+    return render_template('aprioriProcess.html', dataframe=Lista_html, file= file, support=support, confidence=confidence, lift=lift)
 
 @app.route('/metricas')
 def metricas():
@@ -102,7 +127,7 @@ def metricasEuclidiana():
     MParcial = metricas.partialEuclidianDistance(MEuclidiana, limInferior,limSuperior)
     Dst = metricas.distEuclidian(MEuclidiana, distA, distB)
 
-
+    # Cambiar la ejecución del algoritmo hacia un endpoint que sea pedido desde el template, puede observar el ejemplo de apriori
     return render_template("metricasEuclidiana.html"
                            ,euclidianSample=MEstandarizada.to_html()
                            ,MEuclidiana=MEuclidiana.to_html()
