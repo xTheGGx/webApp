@@ -26,22 +26,40 @@ class Metricas:
         
         return euclidianSample
    
-    def createMEuclidian(self, MEstandarizada):
+    def createM(self, MEstandarizada,option):
        
-        DstEuclidiana = cdist(MEstandarizada, MEstandarizada, metric='euclidean')
+        DstEuclidiana = cdist(MEstandarizada, MEstandarizada, metric=option)
         MEuclidiana = pd.DataFrame(DstEuclidiana)
         
         return MEuclidiana
-    def partialEuclidianDistance(self,MEuclidiana,limInferior, limSuperior):
+    def partialDistance(self,MEuclidiana,limInferior, limSuperior,option):
         #Matriz de distancias de una parte del total de objetos
 
-        DstEuclidiana = cdist(MEuclidiana[limInferior:limSuperior], MEuclidiana[limInferior:limSuperior], metric='euclidean')
+        DstEuclidiana = cdist(MEuclidiana[limInferior:limSuperior], MEuclidiana[limInferior:limSuperior], metric=option)
         MEuclidiana = pd.DataFrame(DstEuclidiana)
         return MEuclidiana
 
-    def distEuclidian(self, MEuclidiana, distA, distB):
+    def distEuclidean(self, MEuclidiana, distA, distB):
         #Distancia entre dos objetos
         Objeto1 = MEuclidiana[distA]
         Objeto2 = MEuclidiana[distB]
         dstEuclidiana = distance.euclidean(Objeto1,Objeto2)
+        return dstEuclidiana
+    def distChebyshev(self, MEuclidiana, distA, distB):
+        #Distancia entre dos objetos
+        Objeto1 = MEuclidiana[distA]
+        Objeto2 = MEuclidiana[distB]
+        dstEuclidiana = distance.chebyshev(Objeto1,Objeto2)
+        return dstEuclidiana
+    def distManhattan(self, MEuclidiana, distA, distB):
+        #Distancia entre dos objetos
+        Objeto1 = MEuclidiana[distA]
+        Objeto2 = MEuclidiana[distB]
+        dstEuclidiana = distance.cityblock(Objeto1,Objeto2)
+        return dstEuclidiana
+    def distMinkowski(self, MEuclidiana, distA, distB):
+        #Distancia entre dos objetos
+        Objeto1 = MEuclidiana[distA]
+        Objeto2 = MEuclidiana[distB]
+        dstEuclidiana = distance.minkowski(Objeto1,Objeto2)
         return dstEuclidiana
