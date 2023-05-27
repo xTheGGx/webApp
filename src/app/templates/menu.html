@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Apriori{% endblock %}
+{% block body %}
+<div class="card-container">
+  <div class="mdc-card mdc-card--outlined">
+    <a href="apriori">Apriori</a>
+  </div>
+  <div class="mdc-card mdc-card--outlined">
+    <a href="metricas">Metricas de distancia</a>
+  </div>
+  <div class="mdc-card mdc-card--outlined">
+    <a href="clustering">Clustering</a>
+  </div>
+  <div class="mdc-card mdc-card--outlined">
+    <a href="upload">Subir archivo</a>
+  </div>
+</div>
+{% endblock %}
+{% block styles %}
+<style>
+  .card-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20vh;
+  }
+
+  li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+
+  li a:hover {
+    background-color: #ccc;
+  }
+</style>
+{% endblock %}
