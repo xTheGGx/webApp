@@ -14,10 +14,10 @@
         <br>
         <label for="option-select">Elige el tipo de distancia:</label>
         <select name="option" id="option-select">
-            <option value="Euclidiana">Euclidiana</option>
-            <option value="Chebyshev">Chebyshev</option>
-            <option value="Manhattan">Manhattan</option>
-            <option value="Minkowski">Minkowski</option>
+            <option value="euclidean">Euclidiana</option>
+            <option value="chebyshev">Chebyshev</option>
+            <option value="manhattan">Manhattan</option>
+            <option value="minkowski">Minkowski</option>
         </select>
         <br>
         <input type="text" name="limInf" placeholder="Limite inferior" min="0" max="100" required>
@@ -40,7 +40,7 @@
             var selectedOption = optionSelect.options[optionSelect.selectedIndex].value;
             var metricasForm = document.getElementById("metricas-form");
 
-            if (selectedOption === "Euclidiana") {
+            if (selectedOption === "euclidean") {
                 metricasForm.action = "/metricas/process";
             }
 

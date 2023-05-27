@@ -11,6 +11,8 @@ from scipy.spatial.distance import cdist
 from src.api import app
 from src.ia.aprioriModule import Apriori
 from src.ia.metricasModule import Metricas
+from src.ia.clusteringModule import Clustering
+
 # --------------------
 # ENDPOINTS DEL BACKEND: Puede hacer procesos más pesados como la ejecución de algoritmos y puede pedirse una vez que se cargado el template ya que lo hace asíncronamente, de esta manera se crea una aplicación reactiva
 # --------------------
@@ -98,34 +100,33 @@ def metricasProcess():
     lim_sup = int(request.form['limSup'])
     dist_a = int(request.form['distA'])
     dist_b = int(request.form['distB'])
-    
-    if option == "Euclidiana":
-        return redirect(url_for('metricasEuclidiana', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
-    elif option == "Chebyshev":
-        return redirect(url_for('metricasChebyshev', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
-    elif option == "Manhattan":
-        return redirect(url_for('metricasManhattan', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
-    elif option == "Minkowski":
-        return redirect(url_for('metricasMinkowski', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b))
 
+    if option == "euclidean":
+        return redirect(url_for('metricasEuclidiana', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+    elif option == "chebyshev":
+        return redirect(url_for('metricasChebyshev', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+    elif option == "manhattan":
+        return redirect(url_for('metricasManhattan', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+    elif option == "minkowski":
+        return redirect(url_for('metricasMinkowski', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
 
 
 #Euclidiana, Chebyshev, Manhattan, Minkowski
 
-@app.route("/metricas/euclidian", methods=['GET', 'POST'])
+@app.route("/metricas/euclidean", methods=['GET', 'POST'])
 def metricasEuclidiana():
-    
+    option = request.args.get('option')
     selected_file = request.args.get('selected_file')
     distA = int(request.args.get('dist_a'))
     distB = int(request.args.get('dist_b'))
     limInferior = int(request.args.get('lim_inf'))
     limSuperior = int(request.args.get('lim_sup'))
     metricas = Metricas(selected_file)
-    print(distA,distB,limInferior,limSuperior,selected_file)
+
     MEstandarizada = metricas.createME()
-    MEuclidiana = metricas.createMEuclidian(MEstandarizada)
-    MParcial = metricas.partialEuclidianDistance(MEuclidiana, limInferior,limSuperior)
-    Dst = metricas.distEuclidian(MEuclidiana, distA, distB)
+    MEuclidiana = metricas.createM(MEstandarizada,option)
+    MParcial = metricas.partialDistance(MEuclidiana, limInferior,limSuperior,option)
+    Dst = metricas.distEuclidean(MEuclidiana, distA, distB)
 
     # Cambiar la ejecución del algoritmo hacia un endpoint que sea pedido desde el template, puede observar el ejemplo de apriori
     return render_template("metricasEuclidiana.html"
@@ -140,28 +141,108 @@ def metricasEuclidiana():
 
 @app.route("/metricas/chebyshev")
 def metricasChebyshev():
-    input_folder = 'input'
-    selected_file = request.form['file']
-    df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
-    #Logica 
-    return render_template("metricasChebyshev.html")
+    option = request.args.get('option')
+    selected_file = request.args.get('selected_file')
+    distA = int(request.args.get('dist_a'))
+    distB = int(request.args.get('dist_b'))
+    limInferior = int(request.args.get('lim_inf'))
+    limSuperior = int(request.args.get('lim_sup'))
+    metricas = Metricas(selected_file)
+
+    MEstandarizada = metricas.createME()
+    MEuclidiana = metricas.createM(MEstandarizada,option)
+    MParcial = metricas.partialDistance(MEuclidiana, limInferior,limSuperior,option)
+    Dst = metricas.distChebyshev(MEuclidiana, distA, distB)
+
+
+    return render_template("metricasEuclidiana.html"
+                           ,euclidianSample=MEstandarizada.to_html()
+                           ,MEuclidiana=MEuclidiana.to_html()
+                           , MParcial = MParcial.to_html()
+                           , Dst = Dst, A = distA, B =distB)
+
 
 @app.route("/metricas/manhattan")
 def metricasManhattan():
-    input_folder = 'input'
-    selected_file = request.form['file']
-    df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
-    #Logica 
-    return render_template("metricasManhattan.html")
+    option = 'cityblock'
+    selected_file = request.args.get('selected_file')
+    distA = int(request.args.get('dist_a'))
+    distB = int(request.args.get('dist_b'))
+    limInferior = int(request.args.get('lim_inf'))
+    limSuperior = int(request.args.get('lim_sup'))
+    metricas = Metricas(selected_file)
 
-@app.route("/metricas/minkowsky")
-def metricasMinkowsky():
-    input_folder = 'input'
-    selected_file = request.form['file']
-    df = pd.read_csv(os.path.join(input_folder, selected_file), header = None)
-    #Logica 
-    return render_template("metricasMinkowsky.html")
+    MEstandarizada = metricas.createME()
+    MEuclidiana = metricas.createM(MEstandarizada,option)
+    MParcial = metricas.partialDistance(MEuclidiana, limInferior,limSuperior,option)
+    Dst = metricas.distManhattan(MEuclidiana, distA, distB)
+
+
+    return render_template("metricasEuclidiana.html"
+                           ,euclidianSample=MEstandarizada.to_html()
+                           ,MEuclidiana=MEuclidiana.to_html()
+                           , MParcial = MParcial.to_html()
+                           , Dst = Dst, A = distA, B =distB)
+
+@app.route("/metricas/minkowski")
+def metricasMinkowski():
+    option = request.args.get('option')
+    selected_file = request.args.get('selected_file')
+    distA = int(request.args.get('dist_a'))
+    distB = int(request.args.get('dist_b'))
+    limInferior = int(request.args.get('lim_inf'))
+    limSuperior = int(request.args.get('lim_sup'))
+    metricas = Metricas(selected_file)
+
+    MEstandarizada = metricas.createME()
+    MEuclidiana = metricas.createM(MEstandarizada,option)
+    MParcial = metricas.partialDistance(MEuclidiana, limInferior,limSuperior,option)
+    Dst = metricas.distMinkowski(MEuclidiana, distA, distB)
+
+
+    return render_template("metricasEuclidiana.html"
+                           ,euclidianSample=MEstandarizada.to_html()
+                           ,MEuclidiana=MEuclidiana.to_html()
+                           , MParcial = MParcial.to_html()
+                           , Dst = Dst, A = distA, B =distB)
 
 @app.route('/clustering')
 def clustering():
-    return render_template('clustering.html')
+    input_folder = 'input'
+    files = os.listdir(input_folder)
+    csv_files = [file for file in files if file.endswith('.csv')]
+    return render_template('clustering.html', csv_files=csv_files)
+
+
+@app.route('/clustering/process', methods=['GET', 'POST'])
+def clusteringProcess():
+    selected_file = request.form['file']
+    option = request.form['option']
+    lim_inf = int(request.form['limInf'])
+    lim_sup = int(request.form['limSup'])
+    dist_a = int(request.form['distA'])
+    dist_b = int(request.form['distB'])
+    if option == "jerarquico":
+        return redirect(url_for('clusteringJerarquico', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+    elif option == "particional":
+        return redirect(url_for('clusteringParticional', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+   
+@app.route('/clustering/jerarquico')
+def clusteringJerarquico():
+    option = request.args.get('option')
+    selected_file = request.args.get('selected_file')
+    distA = int(request.args.get('dist_a'))
+    distB = int(request.args.get('dist_b'))
+    limInferior = int(request.args.get('lim_inf'))
+    limSuperior = int(request.args.get('lim_sup'))
+    
+    cluster = clustering(selected_file)
+    CorrMatrix = cluster.createCorrMatrix()
+    
+
+
+    return render_template("jerarquico.html")    
+
+@app.route('/clustering/particional')
+def clusteringParticional():
+    return render_template("particional.html")
