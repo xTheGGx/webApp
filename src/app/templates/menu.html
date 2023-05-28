@@ -1,40 +1,65 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block title %}Apriori{% endblock %}
 {% block body %}
 <div class="card-container">
-  <div class="mdc-card mdc-card--outlined">
-    <a href="apriori">Apriori</a>
-  </div>
-  <div class="mdc-card mdc-card--outlined">
-    <a href="metricas">Metricas de distancia</a>
-  </div>
-  <div class="mdc-card mdc-card--outlined">
-    <a href="clustering">Clustering</a>
-  </div>
-  <div class="mdc-card mdc-card--outlined">
-    <a href="upload">Subir archivo</a>
-  </div>
+  {% for item in algorithms %}
+    <div class="algorithm-menu-card mdc-card">
+      <div class="mdc-card__primary-action">
+        <div class="mdc-card__media mdc-card__media--square">
+          <div class="mdc-card__media-content">
+            <a href="{{ item.link }}">
+              <img class="algoritm-card-image" src="{{ url_for('static', filename=item.image) }}" alt="MagicMine Logo">
+            </a>
+          </div>
+        </div>
+        <div class="mdc-card__ripple"></div>
+      </div>
+      <div class="mdc-card__actions">
+        <h2>{{ item.title }}</h2>
+      </div>
+      <div class="mdc-card__actions">
+          <p>{{ item.description }}</p>
+      </div>
+      <div class="mdc-card__actions">
+        <a href="{{ item.link }}" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">Demo</span>
+        </a>
+        <a href="{{ item.link }}" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">Upload</span>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 </div>
 {% endblock %}
 {% block styles %}
 <style>
   .card-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    height: 20vh;
+    flex-wrap: wrap;
+    min-height: 80vh;
+    padding: 10vh 5vw;
   }
 
-  li a {
-    display: block;
-    padding: 10px 20px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
+  .algorithm-menu-card {
+    width:20%;
+    margin: 5% 1% 0;
+    min-width: 300px;
   }
 
-  li a:hover {
-    background-color: #ccc;
+  .algoritm-card-image {
+    padding: 10%;
+    width: 80%;
+    height: 80%;
+  }
+
+  h2 {
+    margin: 0
   }
 </style>
 {% endblock %}

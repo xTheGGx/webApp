@@ -12,6 +12,31 @@ router = Blueprint('router', __name__)
 def home():
     return render_template('home.html')
 
+@router.route('/menu')
+def menu():
+    algorithms = [
+        {
+            'title': 'Apriori',
+            'description': 'This is the description for Card 1',
+            'image': 'img/logo.png',
+            'link' : 'apriori'
+
+        },
+        {
+            'title': 'Métricas de distancia',
+            'description': 'This is the description for Card 2',
+            'image': 'img/logo.png',
+            'link' : 'metricas'
+        },
+        {
+            'title': 'Clustering',
+            'description': 'This is the description for Card 3',
+            'image': 'img/logo.png',
+            'link': 'metricas'
+        }
+    ]
+    return render_template('menu.html', algorithms=algorithms)
+
 @router.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -24,10 +49,6 @@ def upload():
             error_message = 'Error: El archivo debe tener extensión .csv.'
             return render_template('upload.html', error_message=error_message)
     return render_template('upload.html')
-
-@router.route('/menu')
-def menu():
-    return render_template('menu.html')
 
 @router.route('/apriori')
 def aprioriAlg():

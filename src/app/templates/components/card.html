@@ -1,0 +1,29 @@
+<div class="algorithm-menu-card mdc-card">
+    <div class="mdc-card__primary-action">
+      <div class="mdc-card__media mdc-card__media--square">
+        <div class="mdc-card__media-content">
+          <a href="{{ link }}">
+            <img class="algoritm-card-image" src="{{ url_for('static', filename=image) }}" alt="MagicMine Logo">
+          </a>
+        </div>
+      </div>
+      <!-- ... additional primary action content ... -->
+      <div class="mdc-card__ripple"></div>
+    </div>
+    <div class="mdc-card__actions">
+      <h2>{{ title }}</h2>
+    </div>
+    <div class="mdc-card__actions">
+        <p>{{ description }}</p>
+    </div>
+    <div class="mdc-card__actions">
+      <a href="apriori" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">Demo</span>
+      </a>
+      <a href="apriori" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">Upload</span>
+      </a>
+    </div>
+  </div>

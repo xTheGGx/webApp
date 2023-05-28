@@ -9,6 +9,18 @@
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
     {% block styles %}{% endblock %}
+    <style>
+        body {
+            background-color: #dcdcdc;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        :root {
+        --mdc-theme-primary: #333; /* Set primary theme color */
+        --mdc-theme-secondary: #3f51b5; /* Set secondary theme color */
+        }
+    </style>
 </head>
 <body>
     {% block body %}{% endblock %}
