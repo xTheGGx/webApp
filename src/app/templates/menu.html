@@ -22,7 +22,7 @@
           <p>{{ item.description }}</p>
       </div>
       <div class="mdc-card__actions">
-        <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--outlined">
+        <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--outlined mdc-theme--secondary">
           <div class="mdc-button__ripple"></div>
           <span class="mdc-button__label">Upload</span>
         </a>
@@ -33,13 +33,17 @@
 {% endblock %}
 {% block styles %}
 <style>
+  .menu-icon {
+    display: none;
+  }
+
   .card-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
-    min-height: 80vh;
-    padding: 10vh 5vw;
+    min-height: 70vh;
+    padding: 5% 5vw 0 5vw;
   }
 
   .algorithm-menu-card {

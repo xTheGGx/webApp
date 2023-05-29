@@ -2,11 +2,22 @@
 {% block title %}Página no encontrada{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="mdc-top-app-bar--fixed-adjust">
+<main class="not-found-container mdc-top-app-bar--fixed-adjust">
     <h1>Error 404 - Página no encontrada</h1>
     <p>Lo sentimos, la página que estás buscando no existe.</p>
     <a href="/" class="mdc-button mdc-button--raised">
         <span class="mdc-button__label">Inicio</span>
     </a>
 </main>
+{% endblock %}
+{% block styles %}
+<style>
+    .not-found-container {
+        min-height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+</style>
 {% endblock %}
