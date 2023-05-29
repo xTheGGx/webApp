@@ -21,12 +21,28 @@
         --mdc-theme-secondary: #e48795; /* Set secondary theme color */
         }
 
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (max-width: 480px) {
+            .hide-on-mobile {
+                display: none;
+            }
+        }
+
+        .base-main-container {
+            min-height: calc(80vh - 64px);
+            display: flex;
+        }
+
         .footer {
             height: 20vh;
-            width: 100vw;
+            width: 100%;
             background-color: var(--mdc-theme-primary);
             color: #dcdcdc;
-            margin-top: 5%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -47,11 +63,13 @@
     </footer>
     {% block scripts %}{% endblock %}
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", displayCurrentYear);
+
+        function displayCurrentYear() {
             var year = new Date().getFullYear();
             var yearElement = document.getElementById("current-year");
             yearElement.textContent = year;
-        });
+        }
     </script>
 </body>
 </html>

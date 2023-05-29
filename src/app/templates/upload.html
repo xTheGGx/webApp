@@ -2,27 +2,26 @@
 {% block title %}Subir Archivo CSV{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="mdc-top-app-bar--fixed-adjust">
-    <h1>Subir Archivo CSV</h1>
-    <div class="upload-form">
-        {% if success_message %}
-            <div class="message success-message">
-                {{ success_message }}
-            </div>
-        {% endif %}
-        {% if error_message %}
-            <div class="message error-message">
-                {{ error_message }}
-            </div>
-        {% endif %}
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <label for="file">Seleccionar archivo:</label>
-            <input type="file" id="file" name="file" accept=".csv" required>
-            <input type="submit" value="Subir">
-        </form>
-    </div>
-    <div class="return-button">
-        <a href="menu">Regresar</a>
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
+    <div>
+        <h1>Subir Archivo CSV</h1>
+        <div class="upload-form">
+            {% if success_message %}
+                <div class="message success-message">
+                    {{ success_message }}
+                </div>
+            {% endif %}
+            {% if error_message %}
+                <div class="message error-message">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <label for="file">Seleccionar archivo:</label>
+                <input type="file" id="file" name="file" accept=".csv" required>
+                <input type="submit" value="Subir">
+            </form>
+        </div>
     </div>
 </main>
 {% endblock %}
@@ -64,19 +63,6 @@
     }
     .error-message {
         color: #FF0000;
-    }
-    .return-button {
-        text-align: center;
-        margin-top: 20px;
-    }
-    .return-button a {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-        text-decoration: none;
-    }
-    .return-button a:hover {
-        background-color: #555;
     }
 </style>
 {% endblock %}
