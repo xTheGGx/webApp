@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import os
 from src.app.router import router
 from src.api.routes import api
@@ -11,3 +11,7 @@ app = Flask(__name__, template_folder=template_dir, static_folder= static_dir)
 
 app.register_blueprint(router, url_prefix='/')
 app.register_blueprint(api, url_prefix='/api/v1')
+
+@app.errorhandler(404)
+def pageNotFound(error):
+    return render_template('notFound.html')

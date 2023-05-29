@@ -1,11 +1,9 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block title %}Apriori{% endblock %}
 {% block body %}
-<main>
+{% include 'components/navbar.html' %}
+<main class="mdc-top-app-bar--fixed-adjust">
     <h1>Resultado</h1>
-    <div class="button-container">
-        <a href="/apriori">Regresar</a>
-    </div> 
     <div>
         <h1>Tabla de Reglas de Asociación</h1>
         <ul>
@@ -40,11 +38,6 @@
                 </div>
             </div>
             <div id="progress-linear" class="mdc-linear-progress mdc-linear-progress--indeterminate">
-                <div class="mdc-linear-progress__buffering-dots"></div>
-                <div class="mdc-linear-progress__buffer"></div>
-                <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-                  <span class="mdc-linear-progress__bar-inner"></span>
-                </div>
                 <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
                   <span class="mdc-linear-progress__bar-inner"></span>
                 </div>
@@ -234,6 +227,7 @@
 
     .mdc-linear-progress--indeterminate .mdc-linear-progress__bar-inner {
         animation: mdc-linear-progress-animation 2s infinite linear;
+        border-color: var(--mdc-theme-secondary);
     }
 
     @keyframes mdc-linear-progress-animation {

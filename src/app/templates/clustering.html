@@ -1,6 +1,8 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block title %}Clustering{% endblock %}
 {% block body %}
+{% include 'components/navbar.html' %}
+<main class="mdc-top-app-bar--fixed-adjust">
     <h1>Seleccionar archivo CSV</h1>
     <form action="/clustering/process" method="POST" id="cluster-form">
         <select name="file">
@@ -28,6 +30,7 @@
     <form action="/menu" method="GET">
         <input type="submit" value="Regresar">
     </form>
+</main>
 {% endblock %}
 {% block scripts %}
 <script>

@@ -1,27 +1,30 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block title %}Subir Archivo CSV{% endblock %}
 {% block body %}
-<h1>Subir Archivo CSV</h1>
-<div class="upload-form">
-    {% if success_message %}
-        <div class="message success-message">
-            {{ success_message }}
-        </div>
-    {% endif %}
-    {% if error_message %}
-        <div class="message error-message">
-            {{ error_message }}
-        </div>
-    {% endif %}
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <label for="file">Seleccionar archivo:</label>
-        <input type="file" id="file" name="file" accept=".csv" required>
-        <input type="submit" value="Subir">
-    </form>
-</div>
-<div class="return-button">
-    <a href="menu">Regresar</a>
-</div>
+{% include 'components/navbar.html' %}
+<main class="mdc-top-app-bar--fixed-adjust">
+    <h1>Subir Archivo CSV</h1>
+    <div class="upload-form">
+        {% if success_message %}
+            <div class="message success-message">
+                {{ success_message }}
+            </div>
+        {% endif %}
+        {% if error_message %}
+            <div class="message error-message">
+                {{ error_message }}
+            </div>
+        {% endif %}
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file">Seleccionar archivo:</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+            <input type="submit" value="Subir">
+        </form>
+    </div>
+    <div class="return-button">
+        <a href="menu">Regresar</a>
+    </div>
+</main>
 {% endblock %}
 {% block styles %}
 <style>
