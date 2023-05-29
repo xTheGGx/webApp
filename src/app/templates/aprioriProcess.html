@@ -1,11 +1,9 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block title %}Apriori{% endblock %}
 {% block body %}
-<main>
+{% include 'components/navbar.html' %}
+<main class="mdc-top-app-bar--fixed-adjust">
     <h1>Resultado</h1>
-    <div class="button-container">
-        <a href="/apriori">Regresar</a>
-    </div> 
     <div>
         <h1>Tabla de Reglas de Asociación</h1>
         <ul>

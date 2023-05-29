@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+{% block title %}Página no encontrada{% endblock %}
+{% block body %}
+{% include 'components/navbar.html' %}
+<main class="mdc-top-app-bar--fixed-adjust">
+    <h1>Error 404 - Página no encontrada</h1>
+    <p>Lo sentimos, la página que estás buscando no existe.</p>
+    <a href="/" class="mdc-button mdc-button--raised">
+        <span class="mdc-button__label">Inicio</span>
+    </a>
+</main>
+{% endblock %}

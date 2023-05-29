@@ -1,6 +1,8 @@
 {% extends "base/base.html" %}
 {% block title %}Tabla de frecuencias{% endblock %}
 {% block body %}
+{% include 'components/navbar.html' %}
+<main class="mdc-top-app-bar--fixed-adjust">
     <h1>Resultados</h1>
     <div>
         <h1>Matriz estandarizada</h1>>
@@ -17,13 +19,11 @@
     </div>    
     <div>
         <h1>La distancia  entre los elementos [{{A}}] y [{{B}}] solicitados es: {{ Dst }}</h1>
-
-    </div>
-    
-        
+    </div>  
     <div class="button-container">
         <a href="/metricas">Regresar</a>
     </div>
+</main>
 {% endblock %}
 {% block styles %}
 <style>

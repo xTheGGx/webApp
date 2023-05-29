@@ -1,7 +1,8 @@
 {% extends "base/base.html" %}
 {% block title %}Apriori{% endblock %}
 {% block body %}
-<div class="card-container">
+{% include 'components/navbar.html' %}
+<main class="card-container mdc-top-app-bar--fixed-adjust">
   {% for item in algorithms %}
     <div class="algorithm-menu-card mdc-card">
       <div class="mdc-card__primary-action">
@@ -21,19 +22,14 @@
           <p>{{ item.description }}</p>
       </div>
       <div class="mdc-card__actions">
-        <a href="{{ item.link }}" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
-          <div class="mdc-button__ripple"></div>
-          <span class="mdc-button__label">Demo</span>
-        </a>
-        <a href="{{ item.link }}" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+        <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--outlined">
           <div class="mdc-button__ripple"></div>
           <span class="mdc-button__label">Upload</span>
         </a>
       </div>
     </div>
   {% endfor %}
-</div>
-</div>
+</main>
 {% endblock %}
 {% block styles %}
 <style>

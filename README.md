@@ -6,15 +6,10 @@ Aplicación web con implementación de algoritmos de aprendizaje automático
     virtualenv -p python3 env
     .\env\Scripts\activate
 ---Bibliotecas necesarias
-!pip install flask
-!pip install apyori 
-!pip install pandas
-!pip install matplotlib
-!pip install scipy
-!pip install pandas
-!pip install scikit-learn
-!pip install virtualenv
-!pip install numpy
-
+```
+pip install flask apyori pandas matplotlib scipy pandas scikit-learn virtualenv numpy seaborn
+```
 --Iniciar servicio
-python app.py
+```
+python main.py
+```
