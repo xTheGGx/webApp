@@ -2,26 +2,25 @@
 {% block title %}Tabla de frecuencias{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="mdc-top-app-bar--fixed-adjust">
-    <h1>Resultados</h1>
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
     <div>
-        <h1>Matriz estandarizada</h1>>
-        {{ euclidianSample|safe }}
-    </div>    
-    <div>
-        <h1>Matriz </h1>
-        {{ MEuclidiana | safe}}
-    </div>
-    
-    <div>
-        <h1>Matriz parcial estandarizada</h1>>
-        {{ MParcial|safe }}
-    </div>    
-    <div>
-        <h1>La distancia  entre los elementos [{{A}}] y [{{B}}] solicitados es: {{ Dst }}</h1>
-    </div>
-    <div class="button-container">
-        <a href="/clustering">Regresar</a>
+        <h1>Resultados</h1>
+        <div>
+            <h1>Matriz estandarizada</h1>>
+            {{ euclidianSample|safe }}
+        </div>    
+        <div>
+            <h1>Matriz </h1>
+            {{ MEuclidiana | safe}}
+        </div>
+        
+        <div>
+            <h1>Matriz parcial estandarizada</h1>>
+            {{ MParcial|safe }}
+        </div>    
+        <div>
+            <h1>La distancia  entre los elementos [{{A}}] y [{{B}}] solicitados es: {{ Dst }}</h1>
+        </div>
     </div>
 </main>
 {% endblock %}
@@ -45,20 +44,6 @@
     .small-image {
         max-width: 50%; /* Reducir el ancho máximo de la imagen al 50% */
         height: auto; /* Ajustar automáticamente la altura de la imagen */
-    }
-
-    .button-container {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .button-container a {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #333;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 4px;
     }
 </style>
 {% endblock %}

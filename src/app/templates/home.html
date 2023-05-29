@@ -1,35 +1,32 @@
 {% extends "base/base.html" %}
 {% block title %}MagicMine{% endblock %}
 {% block body %}
-<main class="container">
-  <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="MagicMine Logo">
-  <h1>MagicMine</h1>
-  <p>Bienvenido a MagicMine, el lugar donde la magia se hace con algoritmos.</p>
-  <a href="menu" class="mdc-button mdc-button--raised">
-    <span class="mdc-button__label">Comenzar</span>
-  </a>
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
+  <div class="container">
+    <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="MagicMine Logo">
+    <h1>MagicMine</h1>
+    <p>Bienvenido a MagicMine, el lugar donde la magia se hace con algoritmos.</p>
+    <a href="menu" class="mdc-button mdc-button--raised">
+      <span class="mdc-button__label">Comenzar</span>
+    </a>
+  </div>
 </main>
 {% endblock %}
 {% block styles %}
 <style>
-  body {
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 75vh;
     text-align: center;
+    width: 100%;
+    height: 1100%;
+    padding-bottom: 5%;
   }
   
   .logo {
-    width: 25%;
+    width: 15%;
   }
 
   h1 {
@@ -39,7 +36,7 @@
   }
   
   p {
-    font-size: 18px;
+    font-size: 16px;
     color: #777;
     margin-bottom: 40px;
   }

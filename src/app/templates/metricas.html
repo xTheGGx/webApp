@@ -2,36 +2,35 @@
 {% block title %}Métricas de distancia{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="mdc-top-app-bar--fixed-adjust">
-    <h1>Seleccionar archivo CSV</h1>
-    <form action="/metricas/process" method="POST" id="metricas-form">
-        <select name="file">
-            {% for csv_file in csv_files %}
-            <option value="{{ csv_file }}">{{ csv_file }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="option-select">Elige el tipo de distancia:</label>
-        <select name="option" id="option-select">
-            <option value="euclidean">Euclidiana</option>
-            <option value="chebyshev">Chebyshev</option>
-            <option value="manhattan">Manhattan</option>
-            <option value="minkowski">Minkowski</option>
-        </select>
-        <br>
-        <input type="text" name="limInf" placeholder="Limite inferior" min="0" max="100" required>
-        <br>
-        <input type="text" name="limSup" placeholder="Limite superior" min="0" max="100" required>
-        <br>
-        <input type="text" name="distA" placeholder="Distancia A" min="0" max="100" required>
-        <br>
-        <input type="text" name="distB" placeholder="Distancia B" min="0" max="100" required>
-        <br>
-        <input type="submit" value="Procesar">
-    </form>
-    <form action="/menu" method="GET">
-        <input type="submit" value="Regresar">
-    </form>
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
+    <div>
+        <h1>Seleccionar archivo CSV</h1>
+        <form action="/metricas/process" method="POST" id="metricas-form">
+            <select name="file">
+                {% for csv_file in csv_files %}
+                <option value="{{ csv_file }}">{{ csv_file }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="option-select">Elige el tipo de distancia:</label>
+            <select name="option" id="option-select">
+                <option value="euclidean">Euclidiana</option>
+                <option value="chebyshev">Chebyshev</option>
+                <option value="manhattan">Manhattan</option>
+                <option value="minkowski">Minkowski</option>
+            </select>
+            <br>
+            <input type="text" name="limInf" placeholder="Limite inferior" min="0" max="100" required>
+            <br>
+            <input type="text" name="limSup" placeholder="Limite superior" min="0" max="100" required>
+            <br>
+            <input type="text" name="distA" placeholder="Distancia A" min="0" max="100" required>
+            <br>
+            <input type="text" name="distB" placeholder="Distancia B" min="0" max="100" required>
+            <br>
+            <input type="submit" value="Procesar">
+        </form>
+    </div>
 </main>
 {% endblock %}
 {% block scripts %}

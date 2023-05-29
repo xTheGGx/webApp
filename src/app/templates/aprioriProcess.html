@@ -2,9 +2,9 @@
 {% block title %}Apriori{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="mdc-top-app-bar--fixed-adjust">
-    <h1>Resultado</h1>
-    <div>
+<main class="base-main-container  mdc-top-app-bar--fixed-adjust">
+    <div class="container">
+        <h1>Resultado</h1>
         <h1>Tabla de Reglas de Asociación</h1>
         <ul>
             <li>Dataset: {{file}}</li>
@@ -39,19 +39,15 @@
             </div>
             <div id="progress-linear" class="mdc-linear-progress mdc-linear-progress--indeterminate">
                 <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-                  <span class="mdc-linear-progress__bar-inner"></span>
+                    <span class="mdc-linear-progress__bar-inner"></span>
                 </div>
-              </div>
             </div>
         </div>
-    </div>
-    <img src="{{ url_for('static', filename='img/charts/aprioriFrecuency.png') }}" alt="Gráfico de Barras" class="small-image">
-    <div>
-        {{ dataframe|safe }}
-    </div>
-    <h1>Gráfico de frecuencias</h1>
-    <div class="button-container">
-        <a href="/apriori">Regresar</a>
+        <img src="{{ url_for('static', filename='img/charts/aprioriFrecuency.png') }}" alt="Gráfico de Barras" class="small-image">
+        <div>
+            {{ dataframe|safe }}
+        </div>
+        <h1>Gráfico de frecuencias</h1>
     </div>
 </main>
 {% endblock %}
@@ -191,6 +187,11 @@
 {% endblock %}
 {% block styles %}
 <style>
+    .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
     table {
         border-collapse: collapse;
         width: 50%; /* Reducir el ancho de la tabla al 50% */
@@ -209,20 +210,6 @@
     .small-image {
         max-width: 50%; /* Reducir el ancho máximo de la imagen al 50% */
         height: auto; /* Ajustar automáticamente la altura de la imagen */
-    }
-
-    .button-container {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .button-container a {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #333;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 4px;
     }
 
     .mdc-linear-progress--indeterminate .mdc-linear-progress__bar-inner {

@@ -2,39 +2,41 @@
 {% block title %}Apriori{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="card-container mdc-top-app-bar--fixed-adjust">
-  {% for item in algorithms %}
-    <div class="algorithm-menu-card mdc-card">
-      <div class="mdc-card__primary-action">
-        <div class="mdc-card__media mdc-card__media--square">
-          <div class="mdc-card__media-content">
-            <a href="{{ item.link }}">
-              <img class="algoritm-card-image" src="{{ url_for('static', filename=item.image) }}" alt="MagicMine Logo">
-            </a>
+<main class="base-main-container  mdc-top-app-bar--fixed-adjust">
+  <div class="card-container">
+    {% for item in algorithms %}
+      <div class="algorithm-menu-card mdc-card">
+        <div class="mdc-card__primary-action">
+          <div class="mdc-card__media mdc-card__media--square">
+            <div class="mdc-card__media-content">
+              <a href="{{ item.link }}">
+                <img class="algoritm-card-image" src="{{ url_for('static', filename=item.image) }}" alt="MagicMine Logo">
+              </a>
+            </div>
           </div>
+          <div class="mdc-card__ripple"></div>
         </div>
-        <div class="mdc-card__ripple"></div>
+        <div class="mdc-card__actions">
+          <h2>{{ item.title }}</h2>
+        </div>
+        <div class="mdc-card__actions">
+            <p>{{ item.description }}</p>
+        </div>
+        <div class="mdc-card__actions">
+          <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--outlined mdc-theme--secondary">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label">Upload</span>
+          </a>
+        </div>
       </div>
-      <div class="mdc-card__actions">
-        <h2>{{ item.title }}</h2>
-      </div>
-      <div class="mdc-card__actions">
-          <p>{{ item.description }}</p>
-      </div>
-      <div class="mdc-card__actions">
-        <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--outlined mdc-theme--secondary">
-          <div class="mdc-button__ripple"></div>
-          <span class="mdc-button__label">Upload</span>
-        </a>
-      </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
+  </div>
 </main>
 {% endblock %}
 {% block styles %}
 <style>
-  .menu-icon {
-    display: none;
+  .navbar-menu-icon {
+    display: none !important;
   }
 
   .card-container {
@@ -42,14 +44,14 @@
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
-    min-height: 70vh;
-    padding: 5% 5vw 0 5vw;
+    padding: 5% 5vw 5% 5vw;
+    width: 100%;
   }
 
   .algorithm-menu-card {
-    width:20%;
-    margin: 5% 1% 0;
-    min-width: 300px;
+    margin: 2% 1% 0;
+    width: 270px;
+    min-height: 260px;
   }
 
   .algoritm-card-image {

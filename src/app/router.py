@@ -32,7 +32,7 @@ def menu():
             'title': 'Clustering',
             'description': 'This is the description for Card 3',
             'image': 'img/logo.png',
-            'link': 'metricas'
+            'link': 'clustering'
         }
     ]
     return render_template('menu.html', algorithms=algorithms)
