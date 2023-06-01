@@ -1,4 +1,5 @@
 import os
+import sqlite3
 import pandas as pd    
 from flask import Blueprint, request, render_template, redirect, url_for
 from werkzeug.utils import secure_filename
@@ -6,32 +7,67 @@ from src.api.ia.metricasModule import Metricas
 from src.api.ia.clusteringModule import Clustering
 
 router = Blueprint('router', __name__)
+DATABASE = 'src\db\database.db'
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+
+# Crear tabla si no existe
+c.execute('''CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )''')
+conn.commit()
 
 @router.route('/')
-@router.route('/home')
+@router.route('/home', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+        user = c.fetchone()
+        if user:
+            return f'¡Bienvenido, {username}!'
+        else:
+            return 'Credenciales inválidas. Inténtalo de nuevo.'
     return render_template('home.html')
+
 
 @router.route('/menu')
 def menu():
     algorithms = [
         {
             'title': 'Apriori',
-            'description': 'This is the description for Card 1',
-            'image': 'img/logo.png',
+            'description': 'Descubre patrones ocultos en grandes conjuntos de datos.',
+            'image': 'img/apriori.jpeg',
             'link' : 'apriori'
 
         },
         {
             'title': 'Métricas de distancia',
-            'description': 'This is the description for Card 2',
-            'image': 'img/logo.png',
+            'description': 'Observa cómo revelan similitudes y diferencias entre objetos en el análisis de datos.',
+            'image': 'img/metrics.jpeg',
             'link' : 'metricas'
         },
         {
             'title': 'Clustering',
-            'description': 'This is the description for Card 3',
-            'image': 'img/logo.png',
+            'description': 'Segmenta tus datos y toma decisiones más informadas.',
+            'image': 'img/cluster.jpeg',
+            'link': 'clustering'
+        },
+        {
+            'title': 'Clasificación logistica',
+            'description': 'Descubre cómo la clasificación logística revela patrones y predice resultados.',
+            'image': 'img/forest.jpeg',
+            'link': 'clustering'
+        },
+        {
+            'title': 'Árboles y bosques',
+            'description': 'Explora la magia de los árboles y bosques aleatorios para predecir.',
+            'image': 'img/forest.jpeg',
             'link': 'clustering'
         }
     ]
