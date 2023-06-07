@@ -1,8 +1,46 @@
 {% extends "base/base.html" %}
-{% block title %}Clustering{% endblock %}
+{% block title %}Clustering Jerarquico{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main class="base-main-container  mdc-top-app-bar--fixed-adjust">
-    <h1>Jerarquico</h1>
+<main>
+    <h1>Mapa de Calor</h1>
+    <img src="data:image/png;base64,{{ hMap }}" alt="Mapa de Calor">
+
+    <h1>Matriz de Correlaciones</h1>
+    <table>
+        <!-- Aquí puedes usar iteraciones de Jinja2 para mostrar la matriz de correlaciones -->
+        {% for row in corrMatrix.iterrows() %}
+            <tr>
+                {% for value in row[1] %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Matriz de Variables</h1>
+    <table>
+        <!-- Aquí puedes usar iteraciones de Jinja2 para mostrar la matriz de variables -->
+        {% for row in matrizVar.iterrows() %}
+            <tr>
+                {% for value in row[1] %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Matriz HTML</h1>
+    <table>
+        <!-- Aquí puedes usar iteraciones de Jinja2 para mostrar la matriz HTML -->
+        {% for row in matrix_html %}
+            <tr>
+                <td>{{ row }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Clustering Jerárquico</h1>
+    <img src="data:image/png;base64,{{ hCluster }}" alt="Clustering Jerárquico">
 </main>
 {% endblock %}
