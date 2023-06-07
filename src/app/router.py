@@ -33,6 +33,18 @@ def menu():
             'description': 'This is the description for Card 3',
             'image': 'img/logo.png',
             'link': 'clustering'
+        },
+        {
+            'title': 'Árboles de desición',
+            'description': 'This is the description for Card 3',
+            'image': 'img/logo.png',
+            'link': 'clustering'
+        },
+        {
+            'title': 'Bosques aleatorios',
+            'description': 'This is the description for Card 3',
+            'image': 'img/logo.png',
+            'link': 'clustering'
         }
     ]
     return render_template('menu.html', algorithms=algorithms)
@@ -203,31 +215,38 @@ def clustering():
     csv_files = [file for file in files if file.endswith('.csv')]
     return render_template('clustering.html', csv_files=csv_files)
 
+
 @router.route('/clustering/process', methods=['GET', 'POST'])
 def clusteringProcess():
     selected_file = request.form['file']
     option = request.form['option']
-    lim_inf = int(request.form['limInf'])
-    lim_sup = int(request.form['limSup'])
-    dist_a = int(request.form['distA'])
-    dist_b = int(request.form['distB'])
+    
     if option == "jerarquico":
-        return redirect(url_for('router.clusteringJerarquico', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+        return redirect(url_for('router.clusteringJerarquico', selected_file=selected_file, option = option))
     elif option == "particional":
-        return redirect(url_for('router.clusteringParticional', selected_file=selected_file, lim_inf=lim_inf, lim_sup=lim_sup, dist_a=dist_a, dist_b=dist_b, option = option))
+        return redirect(url_for('clusteringParticional', selected_file=selected_file, option = option))
+   
 
 @router.route('/clustering/jerarquico')
 def clusteringJerarquico():
     option = request.args.get('option')
     selected_file = request.args.get('selected_file')
-    distA = int(request.args.get('dist_a'))
-    distB = int(request.args.get('dist_b'))
-    limInferior = int(request.args.get('lim_inf'))
-    limSuperior = int(request.args.get('lim_sup'))
 
     cluster = Clustering(selected_file)
-    CorrMatrix = cluster.createCorrMatrix()
-    return render_template("jerarquico.html")    
+    corrMatrix = cluster.createCorrMatrix()
+    hMap = cluster.createHeatMap(corrMatrix)
+    matrizVar = cluster.createMVar()
+    Mestandar = cluster.MEstandarizada(matrizVar)
+    hCluster = cluster.hierarchyClusterPNG(Mestandar)
+    matrix_html = cluster.hierarchyClusterArray(Mestandar)
+
+    return render_template("jerarquico.html",
+                           hMap=hMap,
+                           corrMatrix=corrMatrix,
+                           matrizVar=matrizVar,
+                           matrix_html=matrix_html,
+                           hCluster=hCluster)
+
 
 @router.route('/clustering/particional')
 def clusteringParticional():

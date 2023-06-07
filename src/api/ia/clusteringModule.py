@@ -20,15 +20,16 @@ class Clustering:
         
     def __init__(self, fileName):
         self.file = os.path.join(current_dir, f'../../../input/{fileName}')
-
+        self.df = pd.read_csv(self.file)
     def createCorrMatrix(self):
         
-        df = pd.read_csv(self.file)
-        corrMatrix =  df.corr(method='pearson')
+        
+        corrMatrix =  self.df.corr(method='pearson')
          
         return corrMatrix
     
     def createHeatMap(self,df):
+        buffer = io.BytesIO()
         plt.figure(figsize = (14,7) )
         MatrizInf = np.triu(df)
         sns.heatmap(df, cmap = 'RdBu_r', annot = True, mask = MatrizInf)
@@ -39,11 +40,13 @@ class Clustering:
         image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
         return image_base64
     
-    def createMVar(self,df):
-        MatrizVariables = np.array(df [['Texture', 'Area', 'Smoothness', 'Compactness', 'Symmetry', 'FractalDimension']])
-        pd.DataFrame(MatrizVariables)
-        MatrizVariables = df.iloc [:, [3, 5, 6, 7, 10, 11]]
-        return MatrizVariables
+    def createMVar(self):
+        print(self.df)
+        nombres_columnas = self.df.columns.to_numpy()
+        MatrizHipoteca = np.array(self.df[['ingresos', 'gastos_comunes', 'pago_coche', 'gastos_otros', 'ahorros', 'vivienda', 'estado_civil', 'hijos', 'trabajo']])
+        
+
+        return MatrizHipoteca
     
     #Recibe variables con menor dependencia (apoyandose del mapa de calor)
     def MEstandarizada(self,MatrizVariables):
