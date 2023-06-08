@@ -16,14 +16,39 @@
                     {{ error_message }}
                 </div>
             {% endif %}
-            <form action="/upload" method="POST" enctype="multipart/form-data">
+            <form id="upload-form" enctype="multipart/form-data">
                 <label for="file">Seleccionar archivo:</label>
-                <input type="file" id="file" name="file" accept=".csv" required>
-                <input type="submit" value="Subir">
+                <input type="file" id="file-input" name="file" accept=".csv" required>
+                <button type="submit" class="navbar-button mdc-button mdc-button--raised mdc-button--icon-leading">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">upload</i>
+                    <span class="hide-on-mobile mdc-button__label">Subir</span>
+                </button>
             </form>
         </div>
     </div>
 </main>
+{% endblock %}
+{% block scripts %}
+<script>
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const fileInput = document.getElementById('file-input');
+        const file = fileInput.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+        console.log(formData);
+        fetch('/api/v1/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+    });
+</script>
 {% endblock %}
 {% block styles %}
 <style>

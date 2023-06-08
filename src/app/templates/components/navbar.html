@@ -1,47 +1,53 @@
 <header class="mdc-top-app-bar appbar  mdc-top-app-bar--fixed">
   <div class="mdc-top-app-bar__row">
-    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-        <button id="back-button" onclick="goBack()" class="mdc-button mdc-button--outlined mdc-button--icon-leading mdc-theme--secondary">
+    <section class="center-content mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <button id="back-button" onclick="goBack()" class="navbar-button mdc-button mdc-button--outlined mdc-button--icon-leading mdc-theme--secondary">
           <span class="mdc-button__ripple"></span>
           <i class="material-icons mdc-button__icon" aria-hidden="true">arrow_back</i>
           <span class="hide-on-mobile mdc-button__label">Regresar</span>
         </button>
       </section>
-      <section class="navbar-menu-icon center-content mdc-top-app-bar__section mdc-top-app-bar__section--align-center">
-        <a href="/menu" class="mdc-button mdc-button--outlined mdc-button--icon-leading mdc-theme--secondary">
-          <span class="mdc-button__ripple"></span>
-          <i class="material-icons mdc-button__icon" aria-hidden="true">widgets</i>
-          <span class="hide-on-mobile mdc-button__label">Algoritmos</span>
-        </a>
-      </section>
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+      <section class="center-content mdc-top-app-bar__section mdc-top-app-bar__section--align-center">
         <a href="/" class="mdc-button mdc-button--outlined mdc-button--icon-leading mdc-theme--secondary">
           <i class="material-icons mdc-button__icon" aria-hidden="true">home</i>
           <span class="hide-on-mobile mdc-button__label">Inicio</span>
         </a>
+      </section>
+      <section class="center-content mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+        <button id="algorithm-button" onClick="goToAlgorithmsMenu()" class="navbar-button mdc-button mdc-button--outlined mdc-button--icon-leading mdc-theme--secondary">
+          <span class="mdc-button__ripple"></span>
+          <i class="material-icons mdc-button__icon" aria-hidden="true">widgets</i>
+          <span class="hide-on-mobile mdc-button__label">Algoritmos</span>
+        </button>
       </section>
   </div>
 </header>
 <script>
   document.addEventListener("DOMContentLoaded", displayBackButton);
   function displayBackButton() {
-    var element = document.getElementById('back-button');
+    var button = document.getElementById('back-button');
     var currentHostname = window.location.hostname;
     var previousURL = document.referrer;
     
     if (previousURL && previousURL !== '' && previousURL !== 'undefined') {
         var previousHostname = new URL(previousURL).hostname;
         if (currentHostname === previousHostname ) {
-        element.style.display = 'block';
+          button.disabled = false;
         } else {
-        element.style.display = 'none';
+          button.disabled = true;
+
         }
     } else {
-        element.style.display = 'none';
+        button.disabled = true;
+
     }
   };
 
   function goBack() {
     window.history.back();
+  };
+
+  function goToAlgorithmsMenu() {
+    window.location.href = "menu";
   };
 </script>
