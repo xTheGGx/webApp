@@ -11,14 +11,16 @@
     {% block styles %}{% endblock %}
     <style>
         body {
-            background-color: #dcdcdc;
+            background-color: var(--mdc-theme-background);
             margin: 0;
             font-family: 'Roboto', sans-serif;
         }
 
         :root {
         --mdc-theme-primary: #333; /* Set primary theme color */
-        --mdc-theme-secondary: #e48795; /* Set secondary theme color */
+        --mdc-theme-secondary: #fff; /* Set secondary theme color */
+        --mdc-theme-background: #ddd;
+        --theme-disabled: #4c4c4c;
         }
 
         .center-content {
@@ -49,10 +51,15 @@
         }
         
         .footer-label {
-            color: #dcdcdc;
+            color: var(--mdc-theme-secondary);
             text-decoration: none;
             cursor: pointer;
-            font-size: large
+            font-size: large;
+        }
+
+        .navbar-button:disabled {
+            background-color: var(--mdc-theme-primary);
+            color: var(--theme-disabled) !important;
         }
     </style>
 </head>

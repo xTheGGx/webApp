@@ -23,7 +23,7 @@
             <p>{{ item.description }}</p>
         </div>
         <div class="mdc-card__actions">
-          <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--outlined mdc-theme--secondary">
+          <a href="/upload" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised mdc-theme--secondary">
             <div class="mdc-button__ripple"></div>
             <span class="mdc-button__label">Upload</span>
           </a>
@@ -35,10 +35,6 @@
 {% endblock %}
 {% block styles %}
 <style>
-  .navbar-menu-icon {
-    display: none !important;
-  }
-
   .card-container {
     display: flex;
     justify-content: space-around;
@@ -64,4 +60,14 @@
     margin: 0
   }
 </style>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", displayAlgorithmButton);
+  function displayAlgorithmButton() {
+    var button = document.getElementById('algorithm-button');
+    button.classList.add('mdc-button--disabled');
+    button.disabled = true;
+  }
+</script>
 {% endblock %}

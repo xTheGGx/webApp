@@ -1,11 +1,62 @@
 import json
+from functools import wraps
+import signal
 from flask import request, Blueprint, jsonify
 from src.api.ia.aprioriModule import Apriori
 from src.api.ia.metricasModule import Metricas
 
 api = Blueprint('api', __name__)
 
+# Custom error handler decorator
+def timeout_handler(signum, frame):
+    raise TimeoutError('The request timed out.')
+
+def timeout(seconds=10):
+    def decorator(func):
+        @wraps(func)
+        def timeOutWrapper(*args, **kwargs):
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(seconds)
+            try:
+                return func(*args, **kwargs)
+            finally:
+                signal.alarm(0)  # Reset the alarm
+        return timeOutWrapper
+    return decorator
+
+def handle_exceptions(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except (ValueError, KeyError) as e:
+            return jsonify({'error': str(e)}), 400
+        except TimeoutError:
+            return jsonify({'error': 'The request timed out.'}), 408
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    return wrapper
+
+@api.route('/uploado', methods=['POST'])
+@timeout(10)  # Set a timeout of 10 seconds
+@handle_exceptions
+def uploadData():
+    if 'file' not in request.files:
+        raise ValueError('No file provided')
+
+    file = request.files['file']
+
+    if file.filename == '':
+        raise ValueError('No file selected')
+
+    # Process the uploaded file
+    # ...
+
+    return jsonify({'message': 'File uploaded successfully'})
+
 @api.route('/apriori/data', methods=['POST'])
+@timeout(10)  # Set a timeout of 10 seconds
+@handle_exceptions
 def aprioriData():
     file = request.json['file']
     support = float(request.json['support'])
