@@ -1,0 +1,60 @@
+{% extends "base/base.html" %}
+{% block title %}Tabla de frecuencias{% endblock %}
+{% block body %}
+{% include 'components/navbar.html' %}
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
+    <div>
+        <h1>Resultados</h1>
+        {% if heatmap_base64 %}
+            <h3>Mapa de calor de las columnas:</h3>
+            <img src="data:image/png;base64,{{ heatmap_base64 }}" class="small-image" alt="Heatmap">
+            <br>
+            <br>
+            <form action="/clustering/jerarquico" method="POST">
+                <h3>Seleccione las columnas para el análisis de clustering:</h3>
+                <table>
+                    <tr>
+                        <th>Columna</th>
+                        <th>Seleccionar</th>
+                    </tr>
+                    {% for column in corr_matrix.columns %}
+                        <tr>
+                            <td>{{ column }}</td>
+                            <td>
+                                <input type="checkbox" name="columnas" value="{{ column }}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                <input type="submit" value="Generar resultados">
+            </form>
+        {% else %}
+            <h3>No se ha generado el mapa de calor. Por favor, cargue un archivo válido.</h3>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
+{% block styles %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 50%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 4px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .small-image {
+        max-width: 50%;
+        height: auto;
+    }
+</style>
+{% endblock %}

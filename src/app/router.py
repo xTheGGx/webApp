@@ -4,6 +4,9 @@ from flask import Blueprint, request, render_template, redirect, url_for
 from werkzeug.utils import secure_filename
 from src.api.ia.metricasModule import Metricas
 from src.api.ia.clusteringModule import Clustering
+import matplotlib
+matplotlib.use('Agg')
+
 
 router = Blueprint('router', __name__)
 
@@ -224,30 +227,61 @@ def clusteringProcess():
     if option == "jerarquico":
         return redirect(url_for('router.clusteringJerarquico', selected_file=selected_file, option = option))
     elif option == "particional":
-        return redirect(url_for('clusteringParticional', selected_file=selected_file, option = option))
+        return redirect(url_for('router.clusteringParticional', selected_file=selected_file, option = option))
    
 
 @router.route('/clustering/jerarquico')
 def clusteringJerarquico():
     option = request.args.get('option')
     selected_file = request.args.get('selected_file')
-
     cluster = Clustering(selected_file)
-    corrMatrix = cluster.createCorrMatrix()
-    hMap = cluster.createHeatMap(corrMatrix)
-    matrizVar = cluster.createMVar()
-    Mestandar = cluster.MEstandarizada(matrizVar)
-    hCluster = cluster.hierarchyClusterPNG(Mestandar)
-    matrix_html = cluster.hierarchyClusterArray(Mestandar)
+    NoNumMatx = cluster.delNoNums()
+    corrMatrix = cluster.createCorrMatrix(NoNumMatx)
+    cluster.createHeatMap(corrMatrix)
+    #matrizVar = cluster.createMVar()
+    #Mestandar = cluster.MEstandarizada(matrizVar)
+    #hCluster = cluster.hierarchyClusterPNG(Mestandar)
+   # matrix_html = cluster.hierarchyClusterArray(Mestandar)
 
     return render_template("jerarquico.html",
-                           hMap=hMap,
                            corrMatrix=corrMatrix,
-                           matrizVar=matrizVar,
-                           matrix_html=matrix_html,
-                           hCluster=hCluster)
+                           #matrizVar=matrizVar,
+                          # matrix_html=matrix_html,
+                          # hCluster=hCluster
+                          )
 
 
-@router.route('/clustering/particional')
+@router.route('/clustering/particional', methods=['GET', 'POST'])
 def clusteringParticional():
-    return render_template("particional.html")
+    option = request.args.get('option')
+    selected_file = request.args.get('selected_file')
+    cluster = Clustering(selected_file)
+    vars = []
+    corrMatrix = cluster.createCorrMatrix(cluster.delNoNums())
+    var = cluster.getColumns()
+    hMap = cluster.createHeatMap(corrMatrix)
+    if request.method == 'POST':
+        vars = request.form.getlist('vari')
+        metric = request.form['metric']
+        mVar = cluster.createMVar(vars)
+        mEst = cluster.MEstandarizada(mVar)
+        data = cluster.df
+        test = cluster.hierarchyClusterArray(mEst,metric)
+        data['clusterH'] = test.labels_
+        #Crea img de cluster
+        pRoute = cluster. PartitionalClusterPNG(mEst,metric)
+        centroidsP = data.groupby(['clusterH'])[var].mean()
+        centroidsP = centroidsP.to_html()
+        
+        return render_template('particional_results.html'
+                               ,pRoute = pRoute
+                               ,centroidsP =  centroidsP
+                               , variables = vars
+                               , metric = metric
+                               )
+    return render_template("particional.html", hMap = hMap,
+                           variables=var)
+
+@router.route('/clustering/particional/results', methods=['GET', 'POST'])
+def clusteringParticionalResults():
+    h = 2

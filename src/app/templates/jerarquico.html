@@ -1,46 +1,53 @@
 {% extends "base/base.html" %}
-{% block title %}Clustering Jerarquico{% endblock %}
+{% block title %}Cluster Particional{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
-<main>
-    <h1>Mapa de Calor</h1>
-    <img src="data:image/png;base64,{{ hMap }}" alt="Mapa de Calor">
-
-    <h1>Matriz de Correlaciones</h1>
-    <table>
-        <!-- Aquí puedes usar iteraciones de Jinja2 para mostrar la matriz de correlaciones -->
-        {% for row in corrMatrix.iterrows() %}
-            <tr>
-                {% for value in row[1] %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
-
-    <h1>Matriz de Variables</h1>
-    <table>
-        <!-- Aquí puedes usar iteraciones de Jinja2 para mostrar la matriz de variables -->
-        {% for row in matrizVar.iterrows() %}
-            <tr>
-                {% for value in row[1] %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
-
-    <h1>Matriz HTML</h1>
-    <table>
-        <!-- Aquí puedes usar iteraciones de Jinja2 para mostrar la matriz HTML -->
-        {% for row in matrix_html %}
-            <tr>
-                <td>{{ row }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <h1>Clustering Jerárquico</h1>
-    <img src="data:image/png;base64,{{ hCluster }}" alt="Clustering Jerárquico">
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
+    <h1>Mapa de calor.</h1>
+    {% if hMap%}
+    <div class="grafico">
+        <img src="{{ hMap }}" alt = "Error al mostrar el mapa">
+    </div>
+    {% endif %}
+    <h1>Selección de variables. </h1></br>
+    <br>1.0 Correlación fuerte positiva         0.0 Sin Correlación            -1.0 Correlación fuerte negativa</br></br>
+    <input type="checkbox" onclick="for(c in document.getElementsByName('var')) document.getElementsByName('var').item(c).checked = this.checked">Seleccionar todas.
+    <form method="POST">
+            {% for var in variables %}
+                <input type="checkbox" name="var" value="{{var}}"> {{var}} </br>
+            {%endfor%}
+            <br><h1>Elige la métrica para medir distancias.</h1></br>
+            <select name="metric" class="button">
+                <option value="euclidean" > Euclideana </option>
+                <option value="chebyshev" > Chebyshev </option> <br>
+                <option value="cityblock" > Manhattan </option> <br>
+                <option value="minkowski" > Minkowski </option> <br>            
+            </select></br></br>
+                    <input type="submit" value="Subir" class="button"></br></br>
+                        
+    </form>
 </main>
+{% endblock %}
+{% block styles %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 50%; /* Reducir el ancho de la tabla al 50% */
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 4px; /* Reducir el relleno de las celdas de la tabla */
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .small-image {
+        max-width: 50%; /* Reducir el ancho máximo de la imagen al 50% */
+        height: auto; /* Ajustar automáticamente la altura de la imagen */
+    }
+</style>
 {% endblock %}
