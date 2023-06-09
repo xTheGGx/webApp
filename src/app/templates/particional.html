@@ -1,27 +1,30 @@
 {% extends "base/base.html" %}
-{% block title %}Tabla de frecuencias{% endblock %}
+{% block title %}Cluster Particional{% endblock %}
 {% block body %}
 {% include 'components/navbar.html' %}
 <main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
-    <div>
-        <h1>Resultados</h1>
-        <div>
-            <h1>Matriz estandarizada</h1>>
-            {{ euclidianSample|safe }}
-        </div>    
-        <div>
-            <h1>Matriz </h1>
-            {{ MEuclidiana | safe}}
-        </div>
-        
-        <div>
-            <h1>Matriz parcial estandarizada</h1>>
-            {{ MParcial|safe }}
-        </div>    
-        <div>
-            <h1>La distancia  entre los elementos [{{A}}] y [{{B}}] solicitados es: {{ Dst }}</h1>
-        </div>
+    <h1>Mapa de calor.</h1>
+    {% if hMap %}
+    <div class="grafico">
+        <img src="{{ url_for('static', filename='img/charts/hMap.png') }}" alt="Error al mostrar el mapa">
     </div>
+    {% endif %}
+    <h1>Selección de variables. </h1></br>
+    
+    <input type="checkbox" onclick="for(c in document.getElementsByName('vari')) document.getElementsByName('vari').item(c).checked = this.checked">Seleccionar todas.
+    <form method="POST">
+            {% for var in variables %}
+                <input type="checkbox" name="vari" value="{{ var }}"> {{ var }} </br>
+            {% endfor %}
+            <br><h1>Elige la métrica para medir distancias.</h1></br>
+            <select name="metric" class="button">
+                <option value="euclidean">Euclideana</option>
+                <option value="chebyshev">Chebyshev</option>
+                <option value="cityblock">Manhattan</option>
+                <option value="minkowski">Minkowski</option>
+            </select></br></br>
+            <input type="submit" value="Procesar" class="mdc-button mdc-button--raised"></br></br>    
+    </form>
 </main>
 {% endblock %}
 {% block styles %}

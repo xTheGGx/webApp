@@ -1,0 +1,62 @@
+{% extends "base/base.html" %}
+{% block title %}Cluster Particional{% endblock %}
+{% block body %}
+{% include 'components/navbar.html' %}
+<main class="base-main-container center-content mdc-top-app-bar--fixed-adjust">
+   
+    <div class="container">
+        <h1>Resultado</h1>
+        <h1>Mapa de calor.</h1>
+        {% if hMap %}
+        <div class="grafico">
+            <img src="{{ url_for('static', filename='img/charts/hMap.png') }}" alt="Error al mostrar el mapa">
+        </div>
+        {% endif %}
+        <h1>Variables seleccionadas</h1>
+        <ul>
+             {% for var in variables %}
+                 <li>-{{var}} </li> </br>
+             {%endfor%}
+        </ul>
+    
+    <h1>Métrica de distancia : {{metric}} </h1></br>
+    
+    <h1>Cluster particional</h1>
+    {% if pRoute%}
+    <div class="grafico">
+        <img src="{{ url_for('static', filename='img/charts/pCluster.png') }}" alt = "No se pudo mostrar el grafico">
+    </div>
+    {% endif %}
+
+    <h1>Centroides</h1>
+        {% if centroidsP %}
+        <div class="centroids">
+            {{ centroidsP | safe }}
+        </div>
+        {% endif %}
+
+</main>
+{% endblock %}
+{% block styles %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 50%; /* Reducir el ancho de la tabla al 50% */
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 4px; /* Reducir el relleno de las celdas de la tabla */
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .small-image {
+        max-width: 50%; /* Reducir el ancho máximo de la imagen al 50% */
+        height: auto; /* Ajustar automáticamente la altura de la imagen */
+    }
+</style>
+{% endblock %}
